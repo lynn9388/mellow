@@ -1,0 +1,62 @@
+{
+  "dns": {
+    "servers": [
+      "8.8.8.8",
+      "8.8.4.4"
+    ]
+  },
+  "outbounds": [
+    {
+      "protocol": "socks",
+      "tag": "Socks-Out",
+      "settings": {
+        "servers": [
+          {
+            "address": "192.168.122.1",
+            "port": 1086
+          }
+        ]
+      }
+    },
+    {
+      "protocol": "dns",
+      "tag": "Dns-Out",
+      "settings": {}
+    }
+  ],
+  "routing": {
+    "rules": [
+      {
+        "type": "field",
+        "outboundTag": "Dns-Out",
+        "inboundTag": [
+          "tun2socks"
+        ],
+        "network": "udp",
+        "port": 53
+      },
+      {
+        "type": "field",
+        "outboundTag": "Socks-Out",
+        "network": "tcp,udp"
+      }
+    ]
+  },
+  "inbounds": [
+    {
+      "port": 2886,
+      "protocol": "socks",
+      "listen": "127.0.0.1",
+      "settings": {
+        "auth": "noauth",
+        "udp": false
+      }
+    },
+    {
+      "port": 2885,
+      "protocol": "http",
+      "listen": "127.0.0.1",
+      "settings": {}
+    }
+  ]
+}
